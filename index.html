@@ -61,11 +61,11 @@ function deal(lv){const w=WAYS[lv][R(0,WAYS[lv].length-1)];const dec=shuffle(DEC
 const $=id=>document.getElementById(id),el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const SIG={leaf:'M50 8C22 26 14 62 34 86C70 82 88 46 50 8ZM40 74C46 54 52 42 60 30',gold:'M50 8L60 40L92 50L60 60L50 92L40 60L8 50L40 40Z',ice:'M50 6V94M12 28L88 72M88 28L12 72M50 22L38 12M50 22L62 12M50 78L38 88M50 78L62 88',bolt:'M58 6L22 56H46L38 94L78 40H54Z',water:'M50 8C32 36 20 50 20 64A30 30 0 0 0 80 64C80 50 68 36 50 8Z',fire:'M52 6C58 30 80 40 80 64A30 30 0 0 1 20 64C20 48 32 42 36 26C42 34 44 40 44 46C52 38 56 22 52 6Z'};
 const HEROES=[
-{n:'Лиана',t:'Целительница лесов',r:4,bg:4,s:'leaf',a:'#18a558',b:'#c8f05a',d:'#0d5a30',ev:['Песнь','зелёных крон'],hair:0x35d07a,top:0xffffff,low:0x159a58},
+{n:'Лиана',t:'Целительница лесов',r:4,bg:6,s:'leaf',a:'#18a558',b:'#c8f05a',d:'#0d5a30',ev:['Песнь','зелёных крон'],hair:0x35d07a,top:0xffffff,low:0x159a58},
 {n:'Амбра',t:'Алхимик звёзд',r:4,bg:6,s:'gold',a:'#e8890c',b:'#ffe066',d:'#7a4300',ev:['Золотая','формула'],hair:0xf2a51e,top:0xfff2c4,low:0xb8620a},
 {n:'Сольвейг',t:'Ледяной клинок',r:4,bg:5,s:'ice',a:'#1aa7e0',b:'#b8f4ff',d:'#0a4a7a',ev:['Сердце','вечной зимы'],hair:0xdff4ff,top:0x7fd2ff,low:0x1e62b8},
 {n:'Вира',t:'Лучница бури',r:5,bg:3,s:'bolt',a:'#9a3df0',b:'#f0a8ff',d:'#3c1280',ev:['Клятва','грозового неба'],hair:0xb066ff,top:0xf0dcff,low:0x5a24c0},
-{n:'Марейн',t:'Волшебница приливов',r:5,bg:2,s:'water',a:'#1677f0',b:'#7fe6ff',d:'#0a2f80',ev:['Танец','морской волны'],hair:0x3cb4ff,top:0xeafaff,low:0x1a55d0},
+{n:'Марейн',t:'Волшебница приливов',r:5,bg:5,s:'water',a:'#1677f0',b:'#7fe6ff',d:'#0a2f80',ev:['Танец','морской волны'],hair:0x3cb4ff,top:0xeafaff,low:0x1a55d0},
 {n:'Игнис',t:'Владычица пламени',r:5,bg:1,s:'fire',a:'#ee3f16',b:'#ffc23a',d:'#7a1408',ev:['Рассвет','алого пламени'],hair:0xff4a22,top:0xffd46a,low:0xb01818}];
 let muted=true,ac=null,have=[],hand=[],pick=[],wishes=0,errs=[],wallet=[1,2],hist=[],tips=[];
 const sub=(p,q)=>{const n=p[0]*q[1]-q[0]*p[1],d=p[1]*q[1],g=gcd(Math.abs(n),d)||1;return[n/g,d/g]};
@@ -94,4 +94,4 @@ function cinema(){const h=feat(),col=h.r===5?'#ffd24a':'#d7a6ff';Stage3D.hide();
 function finish(){const ov=el('div','ov'),m=el('div','modal');m.append(el('h1',null,'Все героини собраны!'),el('p',null,`Молитв: ${wishes}, неудачных кристаллов: ${errs.length}.`));if(errs.length)m.append(el('p',null,'Разобрать: '+errs.slice(-3).join('; ')));const b=el('button','btn','Играть снова');b.type='button';b.onclick=()=>{ov.remove();have=[];wishes=0;errs=[];hist=[];wallet=[1,2];banner(true)};m.append(b);ov.append(m);document.body.append(ov)}
 theme(HEROES[0]);(function(){const ov=el('div','ov'),m=el('div','modal');m.append(el('h1',null,'Звёздный зов'),el('p',null,'Выбирай осколки так, чтобы вместе они дали ровно 1 целый кристалл. Получилось — молитва и новая героиня.'));const b=el('button','btn','Загрузка…');b.type='button';b.id='start';b.disabled=true;b.onclick=()=>{ov.remove();banner(true)};m.append(b);ov.append(m);document.body.append(ov);const ok=()=>{b.disabled=false;b.textContent='Начать'};window.addEventListener('stage-ready',ok);if(window.Stage3D)ok()})();
 </script>
-<script type="module" src="stage.js"></script></body></html>
+<script type="module" src="stage.js?v=6"></script></body></html>
