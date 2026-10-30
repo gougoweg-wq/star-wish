@@ -1,0 +1,74 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Звёздный зов</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/","@pixiv/three-vrm":"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@3.5.5/lib/three-vrm.module.min.js"}}</script>
+<style>
+:root{--gold:#ffd87a;--pur:#c79bff;--blue:#7cc4ff;--ink:#0c1030;--fg:#f4f1ff}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;height:100%}
+body{color:var(--fg);font:16px/1.35 Georgia,"Times New Roman",serif;background:radial-gradient(ellipse at 50% 18%,#3a3fa8 0,#1a1d5e 34%,#0a0d2a 72%) fixed;overflow:hidden;user-select:none}
+body:before{content:"";position:fixed;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 68%,#fff,transparent),radial-gradient(2px 2px at 44% 14%,#ffe9b0,transparent),radial-gradient(1px 1px at 62% 46%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 26%,#cfe0ff,transparent),radial-gradient(1px 1px at 88% 72%,#fff,transparent),radial-gradient(1.5px 1.5px at 8% 84%,#fff,transparent),radial-gradient(1px 1px at 52% 88%,#ffe9b0,transparent);background-size:420px 420px}
+.app{position:relative;height:100%;max-width:1000px;margin:0 auto;padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.title{font-size:24px;font-weight:700;color:var(--gold);text-shadow:0 0 14px #ffc85a80;letter-spacing:.04em}
+.pills{display:flex;gap:8px}.pill{background:#0a0d2ab0;border:1px solid #ffd87a66;border-radius:999px;padding:4px 12px;font-family:system-ui,sans-serif;font-weight:700;font-size:14px}
+.ib{background:#0a0d2ab0;border:1px solid #ffd87a66;color:var(--fg);border-radius:999px;min-width:40px;min-height:32px;cursor:pointer}
+.goal{text-align:center;font-size:21px;font-weight:700;text-shadow:0 2px 8px #000}
+.altar{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.crystal{position:relative;width:min(34vh,240px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff30,#2a3480 55%,#10143f);box-shadow:0 0 50px #7f8dff90,inset 0 0 40px #ffffff30;border:2px solid #ffd87a99;display:grid;place-items:center}
+.crystal.pulse{animation:pu 1.6s infinite}@keyframes pu{50%{box-shadow:0 0 80px #ffd87acc,inset 0 0 50px #ffffff50}}
+.crystal svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.q{position:relative;font-size:44px;color:#fff;text-shadow:0 0 16px #fff}
+.expr{min-height:34px;font:700 24px ui-monospace,Menlo,Consolas,monospace;color:var(--gold);text-align:center;text-shadow:0 2px 6px #000}
+.shards{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.sh{width:84px;height:92px;cursor:pointer;background:none;border:0;padding:0;position:relative;transition:transform .15s;filter:drop-shadow(0 0 10px #7cc4ffaa)}
+.sh:hover{transform:translateY(-5px)}.sh.on{opacity:.3;transform:scale(.9)}
+.sh svg{position:absolute;inset:0;width:100%;height:100%}.sh b{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font:700 21px/1 ui-monospace,Menlo,Consolas,monospace;color:#fff;text-shadow:0 1px 4px #000}.sh b i{font-style:normal;border-top:2px solid #fff;margin-top:3px;padding-top:3px}
+.btn{font:700 19px Georgia,serif;color:#2a1c05;background:linear-gradient(180deg,#ffe7a6,#f3bc4e);border:0;border-radius:999px;min-height:48px;padding:0 34px;cursor:pointer;box-shadow:0 0 18px #ffd87a80}.btn:disabled{opacity:.4;box-shadow:none}
+.bot{display:flex;gap:8px;justify-content:center;align-items:center;min-height:62px}
+.slot{width:44px;height:60px;border-radius:6px;background:#0a0d2ab0 center/cover;border:1px solid #ffffff40;display:grid;place-items:center;font-size:18px;color:#ffffff66}.slot.f5{border-color:var(--gold);box-shadow:0 0 10px #ffd87a}.slot.f4{border-color:var(--pur);box-shadow:0 0 10px #c79bff}
+.ov{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:#05061acc;padding:16px;text-align:center}
+.ov.black{background:#03040f}
+.modal{max-width:480px;display:flex;flex-direction:column;gap:12px;align-items:center}.modal h1{margin:0;color:var(--gold);font-size:34px}.modal p{margin:0;font-size:20px}
+.sum{font:700 26px/1.5 ui-monospace,Menlo,Consolas,monospace;color:#fff}.sum em{font-style:normal;color:var(--gold)}.sum.bad em{color:#ff9a8a}
+.star{position:fixed;left:-10%;top:-10%;width:30px;height:30px;border-radius:50%;background:#fff;animation:fall 2s ease-in forwards}@keyframes fall{to{left:60%;top:60%;transform:scale(.4)}}
+.star:after{content:"";position:absolute;right:50%;top:50%;width:60vw;height:8px;transform-origin:right center;transform:translateY(-50%) rotate(38deg) translateX(0);border-radius:8px;background:linear-gradient(270deg,currentColor,transparent)}
+.flash{position:fixed;inset:0;background:#fff;animation:fl .8s forwards}@keyframes fl{from{opacity:1}to{opacity:0}}
+.hero{height:min(66vh,520px);width:min(92vw,520px)}.hero canvas{display:block;width:100%!important;height:100%!important}
+.stars{color:var(--gold);font-size:24px;letter-spacing:4px}
+@media (max-height:640px){.crystal{width:150px}.sh{height:78px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="app" id="app"></div>
+<script>
+/*CORE*/
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const add=(p,q)=>{const n=p[0]*q[1]+q[0]*p[1],d=p[1]*q[1],g=gcd(n,d);return[n/g,d/g]};
+const sum=l=>l.reduce(add,[0,1]);
+// Ступени: дроби на сумму 1, плюс ложные осколки
+const WAYS=[
+ [[[1,2],[1,2]],[[1,4],[3,4]],[[2,5],[3,5]],[[1,3],[2,3]],[[3,8],[5,8]]],
+ [[[1,2],[1,4],[1,4]],[[1,3],[1,6],[1,2]],[[1,2],[3,8],[1,8]],[[3,4],[1,8],[1,8]],[[2,3],[1,6],[1,6]]],
+ [[[3,4],[1,6],[1,12]],[[1,2],[1,3],[1,6]],[[2,5],[1,2],[1,10]],[[1,4],[1,3],[5,12]],[[3,10],[1,2],[1,5]]]];
+const DECOYS=[[[1,3],[1,4],[1,5],[3,4],[2,3]],[[1,5],[3,8],[1,3],[3,4],[1,8]],[[1,5],[3,8],[5,6],[2,5],[1,12]]];
+function deal(lv){const w=WAYS[lv][R(0,WAYS[lv].length-1)];const dec=shuffle(DECOYS[lv]).filter(d=>!w.some(x=>x[0]===d[0]&&x[1]===d[1])).slice(0,6-w.length);return shuffle([...w,...dec].map((f,i)=>({f,id:i})))}
+/*END*/
+const app=document.getElementById('app'),el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const HEROES=[{n:'Лиана',t:'Целительница лесов',r:4,hair:0x6fce7c,top:0xe9f7dc,low:0x3f8a57},{n:'Амбра',t:'Алхимик',r:4,hair:0xe0a13c,top:0xfff0cf,low:0x9a5a1f},{n:'Сольвейг',t:'Ледяной клинок',r:4,hair:0xe6f2ff,top:0x8fb8e8,low:0x24406f},{n:'Вира',t:'Лучница бури',r:5,hair:0xa66bff,top:0xe6d8ff,low:0x4a2a8c},{n:'Марейн',t:'Волшебница приливов',r:5,hair:0x5cc3ff,top:0xf2fbff,low:0x1f6fb0},{n:'Игнис',t:'Владычица пламени',r:5,hair:0xff5a3c,top:0xffd87a,low:0x8e1f1f}];
+let muted=true,ac=null,have=[],pity=0,hand=[],pick=[],wishes=0,errs=[];
+const lv=()=>Math.min(2,Math.floor(have.length/2));
+function tone(f,d,t=0){if(muted)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume();const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.1,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g).connect(ac.destination);o.start(s);o.stop(s+d)}catch(e){}}
+function pie(fr){const c=2*Math.PI*45,v=Math.min(1,fr);return `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#ffd87a" stroke-width="10" stroke-dasharray="${c*v} ${c}" stroke-linecap="butt"/></svg>`}
+function round(){hand=deal(lv());pick=[];render()}
+function render(){app.replaceChildren();const top=el('div','top');top.append(el('div','title','Звёздный зов'));const ps=el('div','pills');ps.append(el('div','pill','Героини '+have.length+'/'+HEROES.length));const m=el('button','ib',muted?'🔇':'🔊');m.type='button';m.setAttribute('aria-label','Звук');m.onclick=()=>{muted=!muted;render()};ps.append(m);top.append(ps);app.append(top,el('div','goal','Собери из осколков ровно 1 целый кристалл'));
+ const a=el('div','altar'),c=el('div','crystal'+(pick.length?' pulse':''));c.append(el('div','q','?'));const ex=el('div','expr',pick.length?pick.map(p=>p.f.join('/')).join(' + ')+' = ?':'нажимай на осколки');
+ const row=el('div','shards');hand.forEach(s=>{const on=pick.includes(s),b=el('button','sh'+(on?' on':''));b.type='button';b.dataset.id=s.id;b.setAttribute('aria-label',s.f.join(' из '));b.innerHTML=`<svg viewBox="0 0 84 92"><polygon points="42,2 80,30 66,88 18,88 4,30" fill="#2b3a9e" stroke="#9fd0ff" stroke-width="2"/><polygon points="42,2 80,30 42,44 4,30" fill="#ffffff22"/></svg><b>${s.f[0]}<i>${s.f[1]}</i></b>`;b.onclick=()=>{on?pick=pick.filter(x=>x!==s):pick.push(s);tone(on?400:620,.08);render()};row.append(b)});a.append(c,ex,row);app.append(a);
+ const go=el('button','btn','Призвать ✦');go.type='button';go.id='wish';go.disabled=pick.length<2;go.onclick=wish;const r=el('div','bot');r.append(go);app.append(r);
+ const bot=el('div','bot');HEROES.forEach(h=>{const got=have.includes(h),s=el('div','slot'+(got?' f'+h.r:''),got?'':'?');if(got&&h.thumb)s.style.backgroundImage=`url(${h.thumb})`;bot.append(s)});app.append(bot)}
+function fmt(l){const s=sum(l),d=l.reduce((a,f)=>a*f[1]/gcd(a,f[1]),1);return{line:l.map(f=>f.join('/')).join(' + ')+' = '+l.map(f=>f[0]*d/f[1]).join('/'+d+' + ')+'/'+d,total:s,d,n:Math.round(s[0]/s[1]*d)}}
+function wish(){const l=pick.map(p=>p.f),x=fmt(l),v=x.n/x.d,ok=x.n===x.d;wishes++;const ov=el('div','ov'),m=el('div','modal'),cr=el('div','crystal');cr.innerHTML=pie(0);m.append(cr);const sm=el('div','sum'+(ok?'':' bad'));sm.textContent=x.line;m.append(sm);ov.append(m);document.body.append(ov);setTimeout(()=>{cr.innerHTML=pie(v);tone(ok?880:220,.3)},350);
+ setTimeout(()=>{const e=el('em',null,' = '+x.n+'/'+x.d+(ok?' = 1 ✦':''));sm.append(e);if(ok)setTimeout(()=>{ov.remove();cinema(l.length)},1300);else{errs.push(l.map(f=>f.join('/')).join(' + ')+' = '+x.n+'/'+x.d);const d=x.d-x.n,g=gcd(Math.abs(d),x.d),t=el('p',null,d>0?`Не хватило ${d/g}/${x.d/g}. Кристалл рассыпался.`:`Лишние ${-d/g}/${x.d/g}. Кристалл треснул.`);const b=el('button','btn','Ещё раз');b.type='button';b.id='again';b.onclick=()=>{ov.remove();round()};m.append(t,b)}},1100)}
+function cinema(n){const left=HEROES.filter(h=>!have.includes(h));const pool=left.filter(h=>n>=3?h.r===5:h.r===4);const h=(pool.length?pool:left)[R(0,(pool.length?pool:left).length-1)];const col=h.r===5?'#ffd87a':'#c79bff';const ov=el('div','ov black'),st=el('div','star');st.style.color=col;st.style.boxShadow=`0 0 40px 14px ${col}`;ov.append(st);document.body.append(ov);tone(300,1.6);tone(900,1.8,.1);
+ setTimeout(()=>{st.remove();const f=el('div','flash');ov.append(f);setTimeout(()=>f.remove(),800);have.push(h);const m=el('div','modal'),c=el('div','hero');const nm=el('h1',null,h.n),s=el('div','stars','★'.repeat(h.r)),t=el('p',null,h.t);m.append(c,nm,s,t);const done=have.length===HEROES.length,b=el('button','btn',done?'Отряд собран!':'Дальше');b.type='button';b.id='next';b.onclick=()=>{h.thumb=window.Stage3D.hide();ov.remove();done?finish():round()};m.append(b);ov.append(m);window.Stage3D.show(c,h);[523,659,784,1047].forEach((f,i)=>tone(f,.3,i*.1))},2000)}
+function finish(){const ov=el('div','ov'),m=el('div','modal');m.append(el('h1',null,'Все героини собраны!'),el('p',null,`Молитв: ${wishes}, неудачных кристаллов: ${errs.length}.`));if(errs.length)m.append(el('p',null,'Разобрать: '+errs.slice(-3).join('; ')));const b=el('button','btn','Играть снова');b.type='button';b.onclick=()=>{ov.remove();have=[];wishes=0;errs=[];round()};m.append(b);ov.append(m);document.body.append(ov)}
+(function(){const ov=el('div','ov'),m=el('div','modal');m.append(el('h1',null,'Звёздный зов'),el('p',null,'Выбирай осколки так, чтобы вместе они дали ровно 1 целый кристалл. Получилось — молитва и новая героиня.'),el('p',null,'Из 3 осколков и больше выпадает 5★.'));const b=el('button','btn','Загрузка…');b.type='button';b.id='start';b.disabled=true;b.onclick=()=>{ov.remove();round()};m.append(b);ov.append(m);document.body.append(ov);const ok=()=>{b.disabled=false;b.textContent='Начать'};window.addEventListener('stage-ready',ok);if(window.Stage3D)ok()})();
+</script>
+<script type="module" src="stage.js"></script></body></html>
